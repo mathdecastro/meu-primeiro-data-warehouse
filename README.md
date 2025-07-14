@@ -6,7 +6,7 @@ Este projeto tem como objetivo demonstrar as minhas habilidades práticas de eng
 
 Neste projeto será utilizada a Arquitetura de Dados Medalhão, em que são definidas as camadas **Bronze**, **Prata** e **Ouro**:
 
-![Data Architecture](docs/images/arquitetura.png)
+![alt text](docs/images/arquitetura.png)
 
 #### Camadas
 
