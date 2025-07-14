@@ -7,7 +7,6 @@ Este projeto tem como objetivo demonstrar boa parte das minhas habilidades prát
 Neste projeto será utilizada a Arquitetura de Dados Medalhão, em que são definidas as camadas **Bronze**, **Prata** e **Ouro**:
 
 ![alt text](docs/images/arquitetura.png)
-![alt text](docs/images/arquitetura.svg)
 
 ### Camadas
 
@@ -30,7 +29,7 @@ Todas os nomes de tabelas, não importando em qual camada estejam, deverão segu
 - Não utilizar comandos em SQL como nome de tabelas;
 - Não utilizar acentos.
 
-#### Camada <span style="color:#dd4d2e">Ouro</span>
+#### Camada <span style="color:#dd4d2e">Bronze</span>
 
 - Todos os nomes de tabelas nesta camada devem seguir a seguintes regras:
     - Começar com o nome do sistema de origem (e.g., `crm` , `intranet`).
