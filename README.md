@@ -52,7 +52,26 @@ Todas os nomes de tabelas, não importando em qual camada estejam, deverão segu
 #### **Regras Gerais**
 
 - Todos os nomes de colunas, não importando o tipo de coluna, devem seguir as seguintes regras:
-    - Ser em língua portuguesa;
     - Seguir a convenção *snake_case*;
     - Não utilizar comandos em SQL;
     - Não utilizar acentos.
+
+#### **Chave Primária**
+
+- Todos os nomes de colunas de chave primária em tabelas dimensão deverão ter o sufixo `_key`;
+- `<nome da tabela>_key`:
+    - `<nome da tabela>` se refere ao nome da tabela dimensão;
+    - `_key` se refere ao sufixo de chave primária;
+    - Exemplos: `clientes_key`, `corretores_key`.
+
+#### **Colunas Técnicas**
+
+- Todos os nomes de colunas técnicas deverão começar com o prefixo `dwh_`, seguido de um nome que descreva bem a coluna;
+- `dwh_<nome da coluna>`:
+    - `<nome da coluna>` se refere a um nome que descreva bem o papel da coluna;
+    - `dwh_` se refere ao prefixo utilizado para colunas com informações técnicas de sistema (e.g., hora da inserção dos dados, data da inserção dos dados);
+    - Exemplos: `dwh_hora_carregamento`, `dwh_data_carregamento`.
+
+#### **Procedimentos Armazenados**
+
+- Todos os nomes de procedimentos armazenados, *stored procedures* em inglês, utilizados para carregar os dados deverão começar com o prefixo `load_`, seguido do nome da camada em que os dados estão sendo carregados (e.g., `load_bronze`, `load_prata` ou `load_ouro`)
