@@ -2,6 +2,16 @@
 
 Este projeto tem como objetivo demonstrar boa parte das minhas habilidades práticas de engenharia de dados em um cenário real de construção de um data warehouse.
 
+## :bulb: **Sobre o projeto**
+
+Neste projeto farei a construção de um pipeline moderno e completo, utilizando o PostgreSQL, para consolidar e preparar dados de vendas, possibilitando a elaboração de análises interativas que gerem insights acionáveis. Para atingir este objetivo, listei as principais especificações deste projeto:
+
+- **Fonte dos Dados**: Fazer o *import* de arquivos originados de sistemas comuns de empresas (ERP, CRM, SAP, Intranet e entre outros) em formato CSV;
+- **Qualidade dos Dados**: Garantir a alta qualidade dos dados através de limpeza, padronização, normalização e transformação dos dados;
+- **Integração**: Fazer a integração de dados de diversas fontes através de uma modelagem de dados, disponibilizando dados de alta qualidade e com regras de negócio aplicadas;
+- **Escopo**: Focar somente na versão mais atualizada dos dados. Isto é, não será necessário ter um histórico de dados;
+- **Documentação**: Disponibilizar uma documentação clara do projeto para stakeholders.
+
 ## 🏗️ **Arquitetura**
 
 Neste projeto será utilizada a Arquitetura de Dados Medalhão, em que são definidas as camadas **Bronze**, **Prata** e **Ouro**:
