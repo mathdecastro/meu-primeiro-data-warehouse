@@ -1,3 +1,18 @@
+/*
+============================================================
+Criação do Database e Schemas
+============================================================
+
+Propósito do Script:
+  Este script tem como objetivo apagar e recriar um novo banco de dados chamado "datawarehouse" e os schemas "bronze", "prata" e "ouro" dentro dele, seguindo o padrão da arquitetura medalhão.
+  Ele também garante que quaisquer conexões existentes com o banco de dados sejam terminadas antes de recriá-lo, para evitar conflitos.
+
+AVISO:
+  Este script irá apagar o banco de dados "datawarehouse" se ele já existir.
+  Certifique-se de que não há dados importantes que possam ser perdidos. 
+
+*/
+
 -- Se conectando ao banco postgres, padrão do PostgreSQL
 \c postgres;
 
@@ -25,7 +40,7 @@ CREATE DATABASE datawarehouse;
 -- Se conectando ao banco de dados datawarehouse, que acabamos de criar.
 \c datawarehouse;
 
--- Criar os schemas bronze, prata e ouro
+-- Criando os schemas bronze, prata e ouro
 CREATE SCHEMA IF NOT EXISTS bronze;
 CREATE SCHEMA IF NOT EXISTS prata;
 CREATE SCHEMA IF NOT EXISTS ouro;
