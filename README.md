@@ -30,9 +30,9 @@ Neste projeto será utilizada a Arquitetura de Dados Medalhão, em que são defi
 
 #### **Regras Gerais**
 
-Todas os nomes de tabelas, não importando em qual camada estejam, deverão seguir seguir as seguintes regras:
+Todas os nomes de tabelas, não importando em qual camada estejam, deverão seguir as seguintes regras:
 
-- Ser em língua portuguesa;
+- Ser em língua portuguesa, exceto na camada bronze;
 - Seguir a convenção *snake_case*, que é uma convenção onde todas as letras são minúsculas e a separação de palavras é feita por underscore. A seguir, estão alguns exemplos:
     - `crm_corretores`;
     - `intranet_visitas_assessores`;
