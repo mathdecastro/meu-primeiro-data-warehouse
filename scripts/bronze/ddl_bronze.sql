@@ -1,3 +1,18 @@
+/*
+============================================================
+Criação das tabelas da camada bronze
+============================================================
+
+Propósito do Script:
+    Este script tem como objetivo criar as tabelas da camada bronze do data warehouse, que receberão os dados provenientes das fontes CRM e ERP.
+    As tabelas são criadas com base na estrutura dos arquivos CSV que serão utilizados para o carregamento dos dados.
+
+AVISO:
+    Este script irá apagar as tabelas existentes na camada bronze antes de recriá-las.
+    Certifique-se de que não há dados importantes que possam ser perdidos.
+*/
+
+-- Se conectando ao banco de dados
 \c datawarehouse;
 
 -- Criando tabela para cust_info.csv
@@ -53,7 +68,7 @@ CREATE TABLE bronze.erp_loc_a101(
     cntry VARCHAR(50)
 );
 
--- CRIANDO TABELA PARA PX_CAT_G1V2.csv
+-- Criando tabela para PX_CAT_G1V2.csv
 DROP TABLE IF EXISTS bronze.erp_px_cat_g1v2;
 CREATE TABLE bronze.erp_px_cat_g1v2(
     id VARCHAR(50),
