@@ -4,16 +4,16 @@ Carregamento de Dados na Camada Bronze do Data Warehouse
 ============================================================
 
 Propósito do Script:
-  Este script tem como objetivo carregar dados na camada bronze do data warehouse, utilizando arquivos CSV como fonte.
+  Este script tem como objetivo carregar dados nas tabelas da camada bronze do data warehouse, utilizando arquivos CSV como fonte.
   Ele realiza a limpeza (truncate) das tabelas de destino antes de inserir os novos dados.
   As tabelas de origem incluem informações do CRM e do ERP.
   O script é executado como um procedimento armazenado para facilitar a execução e manutenção.
 */
 
--- Conectando ao banco de dados
+-- Se conectando ao banco de dados
 \c datawarehouse;
 
---Criando o procedimento armazenado para carregar os dados na camada bronze
+-- Criando o procedimento armazenado para carregar os dados na camada bronze
 CREATE OR REPLACE PROCEDURE bronze.load_bronze()
 LANGUAGE plpgsql
 AS
