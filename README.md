@@ -82,6 +82,6 @@ Todas os nomes de tabelas, não importando em qual camada estejam, deverão segu
     - `dwh_` se refere ao prefixo utilizado para colunas com informações técnicas de sistema (e.g., hora da inserção dos dados, data da inserção dos dados);
     - Exemplos: `dwh_hora_carregamento`, `dwh_data_carregamento`.
 
-#### **Procedimentos Armazenados**
+### **Procedimentos Armazenados**
 
 - Todos os nomes de procedimentos armazenados, *stored procedures* em inglês, utilizados para carregar os dados deverão começar com o prefixo `load_`, seguido do nome da camada em que os dados estão sendo carregados (e.g., `load_bronze`, `load_prata` ou `load_ouro`)
