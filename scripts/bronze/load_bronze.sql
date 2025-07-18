@@ -27,20 +27,32 @@ BEGIN
     RAISE NOTICE 'Carregando tabelas do CRM';
     RAISE NOTICE '---------------------------------------------------------';
 
-    -- Truncate e Insert dos dados na tabela crm_cust_info
-    TRUNCATE TABLE bronze.crm_cust_info;
+    -- Truncando dados da tabela crm_cust_info
+    RAISE NOTICE '>> Truncando dados da tabela: bronze.crm_cust_info';
+    TRUNCATE TABlE bronze.crm_cust_info;
+
+    -- Inserindo dados na tabela crm_cust_info
+    RAISE NOTICE '>> Inserindo dados na tabela: bronze.crm_cust_info';
     COPY bronze.crm_cust_info
     FROM 'c:\Users\Antonio Mailson\Desktop\projetos\datawarehouse\data\fonte_crm\cust_info.csv' --Utilizando o usuário Windows do meu irmão :)
     DELIMITER ',' CSV HEADER;
 
-    -- Truncate e Insert dos dados na tabela crm_prd_info
+    -- Truncando dados da tabela crm_prd_info
+    RAISE NOTICE '>> Truncando dados da tabela: bronze.crm_prd_info';
     TRUNCATE TABLE bronze.crm_prd_info;
+
+    -- Inserindo dados na tabela crm_prd_info
+    RAISE NOTICE '>> Inserindo dados na tabela: bronze.crm_prd_info';
     COPY bronze.crm_prd_info
     FROM 'c:\Users\Antonio Mailson\Desktop\projetos\datawarehouse\data\fonte_crm\prd_info.csv'
     DELIMITER ',' CSV HEADER;
 
-    -- Truncate e Insert dos dados na tabela crm_sales_details
+    -- Truncando dados da tabela crm_sales_details
+    RAISE NOTICE '>> Truncando dados da tabela: bronze.crm_sales_details';
     TRUNCATE TABLE bronze.crm_sales_details;
+
+    -- Inserindo dados na tabela crm_sales_details
+    RAISE NOTICE '>> Inserindo dados na tabela: bronze.crm_sales_details';
     COPY bronze.crm_sales_details
     FROM 'c:\Users\Antonio Mailson\Desktop\projetos\datawarehouse\data\fonte_crm\sales_details.csv'
     DELIMITER ',' CSV HEADER;
@@ -50,20 +62,32 @@ BEGIN
     RAISE NOTICE 'Carregando tabelas do ERP';
     RAISE NOTICE '---------------------------------------------------------';
 
-    -- Truncate e Insert dos dados na tabela erp_cust_az12
+    -- Truncando dados da tabela erp_cust_az12
+    RAISE NOTICE '>> Truncando dados da tabela: bronze.erp_cust_az12';
     TRUNCATE TABLE bronze.erp_cust_az12;
+
+    -- Inserindo dados na tabela erp_cust_az12
+    RAISE NOTICE '>> Inserindo dados na tabela: bronze.erp_cust_az12';
     COPY bronze.erp_cust_az12
     FROM 'c:\Users\Antonio Mailson\Desktop\projetos\datawarehouse\data\fonte_erp\CUST_AZ12.csv'
     DELIMITER ',' CSV HEADER;
 
-    -- Truncate e Insert dos dados na tabela erp_loc_a101
+    -- Truncando dados da tabela erp_loc_a101
+    RAISE NOTICE '>> Truncando dados da tabela: bronze.erp_loc_a101';
     TRUNCATE TABLE bronze.erp_loc_a101;
+
+    -- Inserindo dados na tabela erp_loc_a101
+    RAISE NOTICE '>> Inserindo dados na tabela: bronze.erp_loc_a101';
     COPY bronze.erp_loc_a101
     FROM 'c:\Users\Antonio Mailson\Desktop\projetos\datawarehouse\data\fonte_erp\LOC_A101.csv'
     DELIMITER ',' CSV HEADER;
 
-    -- Truncate e Insert dos dados na tabela erp_px_cat_g1v2
+    -- Truncando dados da tabela erp_px_cat_g1v2
+    RAISE NOTICE '>> Truncando dados da tabela: bronze.erp_px_cat_g1v2';
     TRUNCATE TABLE bronze.erp_px_cat_g1v2;
+
+    -- Inserindo dados na tabela erp_px_cat_g1v2
+    RAISE NOTICE '>> Inserindo dados na tabela: bronze.erp_px_cat_g1v2';
     COPY bronze.erp_px_cat_g1v2
     FROM 'c:\Users\Antonio Mailson\Desktop\projetos\datawarehouse\data\fonte_erp\PX_CAT_G1V2.csv'
     DELIMITER ',' CSV HEADER;
