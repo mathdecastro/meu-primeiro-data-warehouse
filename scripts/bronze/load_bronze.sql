@@ -18,6 +18,10 @@ CREATE OR REPLACE PROCEDURE bronze.load_bronze()
 LANGUAGE plpgsql
 AS
 $$
+DECLARE
+    tempo_inicial TIMESTAMP;
+    tempo_final TIMESTAMP;
+    duracao INTERVAL;
 BEGIN
     RAISE NOTICE '=========================================================';
     RAISE NOTICE 'Carregando dados na camada bronze';
@@ -28,6 +32,7 @@ BEGIN
     RAISE NOTICE '---------------------------------------------------------';
 
     -- Truncando dados da tabela crm_cust_info
+    tempo_inicial := CLOCK_TIMESTAMP();
     RAISE NOTICE '>> Truncando dados da tabela: bronze.crm_cust_info';
     TRUNCATE TABlE bronze.crm_cust_info;
 
@@ -36,8 +41,13 @@ BEGIN
     COPY bronze.crm_cust_info
     FROM 'c:\Users\Antonio Mailson\Desktop\projetos\datawarehouse\data\fonte_crm\cust_info.csv' --Utilizando o usuário Windows do meu irmão :)
     DELIMITER ',' CSV HEADER;
+    tempo_final := CLOCK_TIMESTAMP();
+    duracao := tempo_final - tempo_inicial;
+    RAISE NOTICE '>> Tempo de carregamento (em segundos): %', duracao;
+    RAISE NOTICE '';
 
     -- Truncando dados da tabela crm_prd_info
+    tempo_inicial := CLOCK_TIMESTAMP();
     RAISE NOTICE '>> Truncando dados da tabela: bronze.crm_prd_info';
     TRUNCATE TABLE bronze.crm_prd_info;
 
@@ -46,8 +56,13 @@ BEGIN
     COPY bronze.crm_prd_info
     FROM 'c:\Users\Antonio Mailson\Desktop\projetos\datawarehouse\data\fonte_crm\prd_info.csv'
     DELIMITER ',' CSV HEADER;
+    tempo_final := CLOCK_TIMESTAMP();
+    duracao := tempo_final - tempo_inicial;
+    RAISE NOTICE '>> Tempo de carregamento (em segundos): %', duracao;
+    RAISE NOTICE '';
 
     -- Truncando dados da tabela crm_sales_details
+    tempo_inicial := CLOCK_TIMESTAMP();
     RAISE NOTICE '>> Truncando dados da tabela: bronze.crm_sales_details';
     TRUNCATE TABLE bronze.crm_sales_details;
 
@@ -56,13 +71,17 @@ BEGIN
     COPY bronze.crm_sales_details
     FROM 'c:\Users\Antonio Mailson\Desktop\projetos\datawarehouse\data\fonte_crm\sales_details.csv'
     DELIMITER ',' CSV HEADER;
-
+    tempo_final := CLOCK_TIMESTAMP();
+    duracao := tempo_final - tempo_inicial;
+    RAISE NOTICE '>> Tempo de carregamento (em segundos): %', duracao;
     RAISE NOTICE '';
+
     RAISE NOTICE '---------------------------------------------------------';
     RAISE NOTICE 'Carregando tabelas do ERP';
     RAISE NOTICE '---------------------------------------------------------';
 
     -- Truncando dados da tabela erp_cust_az12
+    tempo_inicial := CLOCK_TIMESTAMP();
     RAISE NOTICE '>> Truncando dados da tabela: bronze.erp_cust_az12';
     TRUNCATE TABLE bronze.erp_cust_az12;
 
@@ -71,8 +90,13 @@ BEGIN
     COPY bronze.erp_cust_az12
     FROM 'c:\Users\Antonio Mailson\Desktop\projetos\datawarehouse\data\fonte_erp\CUST_AZ12.csv'
     DELIMITER ',' CSV HEADER;
+    tempo_final := CLOCK_TIMESTAMP();
+    duracao := tempo_final - tempo_inicial;
+    RAISE NOTICE '>> Tempo de carregamento (em segundos): %', duracao;
+    RAISE NOTICE '';
 
     -- Truncando dados da tabela erp_loc_a101
+    tempo_inicial := CLOCK_TIMESTAMP();
     RAISE NOTICE '>> Truncando dados da tabela: bronze.erp_loc_a101';
     TRUNCATE TABLE bronze.erp_loc_a101;
 
@@ -81,8 +105,13 @@ BEGIN
     COPY bronze.erp_loc_a101
     FROM 'c:\Users\Antonio Mailson\Desktop\projetos\datawarehouse\data\fonte_erp\LOC_A101.csv'
     DELIMITER ',' CSV HEADER;
+    tempo_final := CLOCK_TIMESTAMP();
+    duracao := tempo_final - tempo_inicial;
+    RAISE NOTICE '>> Tempo de carregamento (em segundos): %', duracao;
+    RAISE NOTICE '';
 
     -- Truncando dados da tabela erp_px_cat_g1v2
+    tempo_inicial := CLOCK_TIMESTAMP();
     RAISE NOTICE '>> Truncando dados da tabela: bronze.erp_px_cat_g1v2';
     TRUNCATE TABLE bronze.erp_px_cat_g1v2;
 
@@ -91,5 +120,9 @@ BEGIN
     COPY bronze.erp_px_cat_g1v2
     FROM 'c:\Users\Antonio Mailson\Desktop\projetos\datawarehouse\data\fonte_erp\PX_CAT_G1V2.csv'
     DELIMITER ',' CSV HEADER;
+    tempo_final := CLOCK_TIMESTAMP();
+    duracao := tempo_final - tempo_inicial;
+    RAISE NOTICE '>> Tempo de carregamento (em segundos): %', duracao;
+    RAISE NOTICE '';
 END;
 $$;
