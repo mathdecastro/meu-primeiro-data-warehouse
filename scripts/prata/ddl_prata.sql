@@ -25,7 +25,7 @@ CREATE TABLE prata.crm_clientes_info(
     clientes_estado_civil VARCHAR(50),
     clientes_sexo VARCHAR(50),
     clientes_data_cadastro DATE,
-    dwh_data_criacao TIMESTAMP DEFAULT CURRENT_DATE
+    dwh_data_criacao TIMESTAMP DEFAULT now()
 );
 
 -- Criando tabela prata.crm_produtos_info utilizando a bronze.crm_prd_info
@@ -35,10 +35,11 @@ CREATE TABLE prata.crm_produtos_info(
     produtos_key VARCHAR(50),
     produtos_nome_produto VARCHAR(100),
     produtos_custo INT,
-    produtos_linha_producao VARCHAR(50),
+    produtos_linha VARCHAR(50),
     produtos_data_inicio DATE,
     produtos_data_final DATE,
-    dwh_data_criacao TIMESTAMP DEFAULT CURRENT_DATE
+    produtos_id_categoria VARCHAR(50),
+    dwh_data_criacao TIMESTAMP DEFAULT now()
 );
 
 -- Criando tabela prata.crm_vendas_detalhes utilizando a bronze.crm_sales_details
@@ -47,13 +48,13 @@ CREATE TABLE prata.crm_vendas_detalhes(
     vendas_numero_pedido VARCHAR(50),
     vendas_produtos_key VARCHAR(50),
     vendas_clientes_id INT,
-    vendas_data_pedido VARCHAR(50),
-    vendas_data_envio VARCHAR(50),
-    vendas_data_vencimento VARCHAR(50),
+    vendas_data_pedido DATE,
+    vendas_data_envio DATE,
+    vendas_data_vencimento DATE,
     vendas_valor_venda INT,
     vendas_quantidade INT,
     vendas_preco INT,
-    dwh_data_criacao TIMESTAMP DEFAULT CURRENT_DATE
+    dwh_data_criacao TIMESTAMP DEFAULT now()
 );
 
 -- Criando tabela prata.erp_clientes_info utilizando a bronze.erp_cust_az12
@@ -62,7 +63,7 @@ CREATE TABLE prata.erp_clientes_info(
     clientes_id VARCHAR(50),
     clientes_data_nascimento DATE,
     clientes_sexo VARCHAR(50),
-    dwh_data_criacao TIMESTAMP DEFAULT CURRENT_DATE
+    dwh_data_criacao TIMESTAMP DEFAULT now()
 );
 
 -- Criando tabela prata.erp_clientes_pais utilizando a bronze.erp_loc_a101
@@ -70,7 +71,7 @@ DROP TABLE IF EXISTS prata.erp_clientes_pais;
 CREATE TABLE prata.erp_clientes_pais(
     clientes_id VARCHAR(50),
     clientes_pais VARCHAR(50),
-    dwh_data_criacao TIMESTAMP DEFAULT CURRENT_DATE
+    dwh_data_criacao TIMESTAMP DEFAULT now()
 );
 
 -- Criando tabela prata.erp_produtos_cat utilizando a bronze.erp_px_cat_g1v2
@@ -80,5 +81,5 @@ CREATE TABLE prata.erp_produtos_cat(
     produtos_categoria_produto VARCHAR(50),
     produtos_subcategoria_produto VARCHAR(50),
     produtos_manutencao VARCHAR(50),
-    dwh_data_criacao TIMESTAMP DEFAULT CURRENT_DATE
+    dwh_data_criacao TIMESTAMP DEFAULT now()
 );
