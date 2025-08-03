@@ -4,9 +4,12 @@ Carregamento de Dados na Camada Prata do Data Warehouse
 ============================================================
 
 Propósito do Script:
-  Este script tem como objetivo carregar dados nas tabelas da camada prata do data warehouse, utilizando dados da camada bronze como fonte.
-  Ele realiza a limpeza (truncate) das tabelas de destino antes de inserir os novos dados padronizados, normalizados e limpos.
-  O script é executado como um procedimento armazenado para facilitar a execução e manutenção.
+    Este script tem como objetivo a criação de um procedimento armazenado para carregar dados nas tabelas da camada prata do data warehouse, utilizando dados da camada bronze como fonte.
+    Ele realiza a limpeza (truncate) das tabelas de destino antes de inserir os novos dados padronizados, normalizados e limpos.
+    O script é executado como um procedimento armazenado para facilitar a execução e manutenção.
+
+Modo de Uso:
+    - Após rodar este script de criação do procedimento armazenado, rode a seguinte query: CALL prata.load_prata()
 */
 
 -- Se conectando ao banco de dados
@@ -101,12 +104,12 @@ BEGIN
         prd_id,
         SUBSTR(prd_key, 7, LENGTH(prd_key)) AS prd_key, -- Coluna Derivada: Extraindo uma chave primária da antiga coluna prd_key
         TRIM(prd_nm) AS prd_nm, -- Limpeza: Retirando espaços extras nesta coluna
-        NULLIF(prd_cost, 0) AS prd_cost, -- Limpeza: Se o custo do produto for nulo, então é zero
+        COALESCE(prd_cost, 0) AS prd_cost, -- Limpeza: Se o custo do produto for nulo, então é zero
         CASE UPPER(TRIM(prd_line))
-            WHEN 'R' THEN 'Road' -- Limpeza e Padronização: Se for R, então é Road
-            WHEN 'M' THEN 'Mountain' -- Limpeza e Padronização: Se for M, então é Mountain
-            WHEN 'T' THEN 'Touring' -- Limpeza e Padronização: Se for T, então é Touring
-            WHEN 'S' THEN 'Other Sales' -- Limpeza e Padronização: Se for S, então é Other Sales
+            WHEN 'R' THEN 'Road' -- Limpeza e Padronização: Se for R, então é um produto da linha Road
+            WHEN 'M' THEN 'Mountain' -- Limpeza e Padronização: Se for M, então é um produto da linha Mountain
+            WHEN 'T' THEN 'Touring' -- Limpeza e Padronização: Se for T, então é um produto da linha Touring
+            WHEN 'S' THEN 'Other Sales' -- Limpeza e Padronização: Se for S, então é um produto da linha Other Sales
             ELSE 'Unknown' -- Limpeza e Padronização: Se não for nenhum dos anteriores, então é Unknown
         END AS prd_line,
         prd_start_date,
@@ -146,31 +149,31 @@ BEGIN
         sls_prd_key,
         sls_cust_id,
         CASE
-            WHEN CAST(sls_order_dt AS INTEGER) = 0 THEN NULL
-            WHEN LENGTH(sls_order_dt) != 8 THEN NULL
-            ELSE TO_DATE(sls_order_dt, 'YYYYMMDD')
+            WHEN CAST(sls_order_dt AS INTEGER) = 0 THEN NULL -- Limpeza: Se a data convertida em inteiro for zero, então é nulo
+            WHEN LENGTH(sls_order_dt) != 8 THEN NULL -- Limpeza: Se o tamanho do texto de data for diferente de oito, então é nulo
+            ELSE TO_DATE(sls_order_dt, 'YYYYMMDD') -- Limpeza: Se não for nenhum dos anteriores, então transforma o tipo do dado para DATE
         END AS sls_order_dt,
         CASE
-            WHEN CAST(sls_ship_dt AS INTEGER) = 0 THEN NULL
-            WHEN LENGTH(sls_ship_dt) != 8 THEN NULL
-            ELSE TO_DATE(sls_ship_dt, 'YYYYMMDD')
+            WHEN CAST(sls_ship_dt AS INTEGER) = 0 THEN NULL -- Limpeza: Se a data convertida em inteiro for zero, então é nulo
+            WHEN LENGTH(sls_ship_dt) != 8 THEN NULL -- Limpeza: Se o tamanho do texto de data for diferente de oito, então é nulo
+            ELSE TO_DATE(sls_ship_dt, 'YYYYMMDD') -- Limpeza: Se não for nenhum dos anteriores, então transforma o tipo do dado para DATE
         END AS sls_ship_dt,
         CASE
-            WHEN CAST(sls_due_dt AS INTEGER) = 0 THEN NULL
-            WHEN LENGTH(sls_due_dt) != 8 THEN NULL
-            ELSE TO_DATE(sls_due_dt, 'YYYYMMDD')
+            WHEN CAST(sls_due_dt AS INTEGER) = 0 THEN NULL -- Limpeza: Se a data convertida em inteiro for zero, então é nulo
+            WHEN LENGTH(sls_due_dt) != 8 THEN NULL -- Limpeza: Se o tamanho do texto de data for diferente de oito, então é nulo
+            ELSE TO_DATE(sls_due_dt, 'YYYYMMDD') -- Limpeza: Se não for nenhum dos anteriores, então transforma o tipo do dado para DATE
         END AS sls_due_dt,
         CASE
-            WHEN sls_sales IS NULL THEN sls_quantity*ABS(sls_price)
-            WHEN sls_sales <= 0 THEN sls_quantity*ABS(sls_price)
-            WHEN sls_sales != sls_quantity*ABS(sls_price) THEN sls_quantity*ABS(sls_price)
-            ELSE sls_sales
+            WHEN sls_sales IS NULL THEN sls_quantity*ABS(sls_price) -- Limpeza: Se o valor da venda for nulo, então é igual à seguinte regra de negócio: Quantidade Vendida (sls_quantity) x Preço Absoluto do Produto (ABS(sls_price))
+            WHEN sls_sales <= 0 THEN sls_quantity*ABS(sls_price) -- Limpeza: Se o valor da venda for menor que zero, então é Quantidade Vendida x Preço Absoluto do Produto
+            WHEN sls_sales != sls_quantity*ABS(sls_price) THEN sls_quantity*ABS(sls_price) -- Limpeza: Se o valor da venda for diferente de Quantidade Vendida x Preço Absoluto do Produto, então é Quantidade Vendida x Preço Absoluto do Produto
+            ELSE sls_sales -- Limpeza: Se não for nenhum dos anteriores, então não aplicar nenhuma limpeza
         END AS sls_sales,
         sls_quantity,
         CASE
-            WHEN sls_price IS NULL THEN sls_sales/NULLIF(sls_quantity, 0) 
-            WHEN sls_price <= 0 THEN sls_sales/NULLIF(sls_quantity, 0)
-            ELSE sls_price
+            WHEN sls_price IS NULL THEN sls_sales/NULLIF(sls_quantity, 0) -- Limpeza: Se o preço do produto for nulo, então é igual à seguinte regra de negócio: Valor da Venda (sls_sales) / Quantidade Vendida (sls_quantity). Se o denominador for zero, então o dado será nulo
+            WHEN sls_price <= 0 THEN sls_sales/NULLIF(sls_quantity, 0) -- Limpeza: Se o preço do produto for menor que zero, então é Valor da Venda / Quantidade Vendida
+            ELSE sls_price -- Limpeza: Se não for nenhum dos anteriores, então não aplicar nenhuma limpeza
         END AS sls_price
     FROM
         bronze.crm_sales_details;
@@ -198,17 +201,17 @@ BEGIN
         )
     SELECT
         CASE
-            WHEN cid LIKE 'NAS%' THEN SUBSTR(cid, 4, LENGTH(cid))
-            ELSE cid
+            WHEN cid LIKE 'NAS%' THEN SUBSTR(cid, 4, LENGTH(cid)) -- Limpeza e Padronização: Se o id começar com "NAS", então retirar este trecho do dado
+            ELSE cid -- Limpeza e Padronização: Se não for o anterior, então não aplicar nenhuma limpeza ou padronização
         END AS cid,
         CASE
-            WHEN bdate > current_date THEN NULL
-            ELSE bdate
+            WHEN bdate > current_date THEN NULL -- Limpeza e Padronização: Se a data de nascimento do cliente for maior do que a data do dia, então é nulo
+            ELSE bdate -- Limpeza e Padronização: Se não for o anterior, então não aplicar nenhuma limpeza ou padronização
         END AS bdate,
         CASE
-            WHEN UPPER(TRIM(gen)) LIKE 'M%' THEN 'Male'
-            WHEN UPPER(TRIM(gen)) LIKE 'F%' THEN 'Female'
-            ELSE 'Unknown'
+            WHEN UPPER(TRIM(gen)) LIKE 'M%' THEN 'Male' -- Limpeza e Padronização: Se começar com M, então é Male
+            WHEN UPPER(TRIM(gen)) LIKE 'F%' THEN 'Female' -- Limpeza e Padronização: Se começar com F, então é Female
+            ELSE 'Unknown' -- Limpeza e Padronização: Se não for nenhum dos anteriores, então é Unknown
         END AS gen
     FROM
         bronze.erp_cust_az12;
@@ -230,17 +233,17 @@ BEGIN
             clientes_pais
         )
     SELECT
-        REPLACE(cid, '-', CAST('' AS VARCHAR)) AS cid,
+        REPLACE(cid, '-', CAST('' AS VARCHAR)) AS cid, -- Padronização: Retirar o seguinte caracter "-" do id
         CASE
-            WHEN UPPER(TRIM(cntry)) IN ('US', 'USA', 'UNITED STATES', 'UNITED STATES OF AMERICA', 'AMERICA') THEN 'United States'
-            WHEN UPPER(TRIM(cntry)) IN ('UK', 'UNITED KINGDOM') THEN 'United Kingdom'
-            WHEN UPPER(TRIM(cntry)) IN ('DE', 'DEUTSCHLAND', 'GERMANY') THEN 'Germany'
-            WHEN UPPER(TRIM(cntry)) IN ('CANADA') THEN 'Canada'
-            WHEN UPPER(TRIM(cntry)) IN ('FRANCE') THEN 'France'
-            WHEN UPPER(TRIM(cntry)) IN ('AUSTRALIA') THEN 'Australia'
-            WHEN UPPER(TRIM(cntry)) = '' THEN 'Unknown'
-            WHEN UPPER(TRIM(cntry)) IS NULL THEN 'Unknown'
-            ELSE cntry
+            WHEN UPPER(TRIM(cntry)) IN ('US', 'USA', 'UNITED STATES', 'UNITED STATES OF AMERICA', 'AMERICA') THEN 'United States' -- Limpeza e Padronização: Se for qualquer um do grupo, então é United States
+            WHEN UPPER(TRIM(cntry)) IN ('UK', 'UNITED KINGDOM') THEN 'United Kingdom' -- Limpeza e Padronização: Se for qualquer um do grupo, então é United Kingdom
+            WHEN UPPER(TRIM(cntry)) IN ('DE', 'DEUTSCHLAND', 'GERMANY') THEN 'Germany' -- Limpeza e Padronização: Se for qualquer um do grupo, então é Germany
+            WHEN UPPER(TRIM(cntry)) IN ('CANADA') THEN 'Canada' -- Limpeza e Padronização: Se for qualquer um do grupo, então é Canada
+            WHEN UPPER(TRIM(cntry)) IN ('FRANCE') THEN 'France' -- Limpeza e Padronização: Se for qualquer um do grupo, então é France
+            WHEN UPPER(TRIM(cntry)) IN ('AUSTRALIA') THEN 'Australia' -- Limpeza e Padronização: Se for qualquer um do grupo, então é Australia
+            WHEN UPPER(TRIM(cntry)) = '' THEN 'Unknown' -- Limpeza e Padronização: Se não tiver nada escrito, então é Unknown
+            WHEN UPPER(TRIM(cntry)) IS NULL THEN 'Unknown' -- Limpeza e Padronização: Se for nulo, então é Unknown
+            ELSE cntry -- Limpeza e Padronização: Se não for nenhum dos anteriores, então não aplicar nenhuma limpeza ou padronização
         END AS cntry
     FROM
         bronze.erp_loc_a101;
