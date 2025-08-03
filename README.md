@@ -87,3 +87,5 @@ Todas os nomes de tabelas, não importando em qual camada estejam, deverão segu
 ### **Procedimentos Armazenados**
 
 - Todos os nomes de procedimentos armazenados, *stored procedures* em inglês, utilizados para carregar os dados deverão começar com o prefixo `load_`, seguido do nome da camada em que os dados estão sendo carregados (e.g., `load_bronze`, `load_prata` ou `load_ouro`)
+
+## :arrow_right: **Fluxo, Integração e Modelagem de Dados**
