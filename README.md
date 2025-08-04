@@ -89,3 +89,44 @@ Todas os nomes de tabelas, não importando em qual camada estejam, deverão segu
 - Todos os nomes de procedimentos armazenados, *stored procedures* em inglês, utilizados para carregar os dados deverão começar com o prefixo `load_`, seguido do nome da camada em que os dados estão sendo carregados (e.g., `load_bronze`, `load_prata` ou `load_ouro`)
 
 ## :arrow_right: **Fluxo, Integração e Modelagem de Dados**
+
+Após uma etapa de análise dos dados, foi idealizado o seguinte fluxo de dados e arranjo de tabelas e views. Em síntese, na camada bronze, a ideia é trazer o dado bruto e não mexer nada neste dado, nem mesmo no nome da tabela. Seguindo o fluxo, quando este dado chega na camada prata é realizada uma limpeza e uma série de padronizações, além de traduzir todos os nomes de tabelas e colunas para o português. Após isto, seguindo o fluxo dos dados para a camada ouro, é feita uma integração e modelagem utilizando as tabelas da camada prata.
+
+![alt text](docs/images/fluxo.png)
+
+Na camada prata já foi possível compreender de uma melhor maneira como as tabelas se relacionam entre si e, com isso, maneiras de agregá-las e integrá-las. Também nesta etapa de integração dos dados foi percebida uma melhor riqueza dos dados originados do CRM, em comparação com os dados originados do ERP. Entretanto, os dados do CRM foram os que mais precisaram ser limpos e padronizados.
+
+![alt text](docs/images/integracao.png)
+
+Na camada ouro, adotamos uma modelagem de dados do tipo *star schema*, que se encaixa muito bem para o propósito deste Data Warehouse. Temos uma tabela fato com os dados transacionais de vendas com duas chaves estrangeiras que conectam com as duas tabelas dimensão de produtos e clientes.
+
+As conexões entre tabelas são do tipo *1 Mandatory to Many Optional*, ou seja:
+- Na tabela de produtos:
+    - Pode haver produtos que não foram vendidos ainda.
+    - Pode haver produtos que foram vendidos uma única vez.
+    - Pode haver produtos que foram vendidos mais de uma vez.
+
+- Na tabela de clientes:
+    - Pode haver clientes que não compraram ainda.
+    - Pode haver clientes que compraram uma única vez.
+    - Pode haver clientes que compraram mais de uma vez.
+
+![alt text](docs/images/modelagem.png)
+
+Uma das etapas mais importantes após a criação de um Data Warehouse é a de disponibilizar uma documentação clara do que é exatamente cada dado de cada tabela. Estou me referindo à criação de um catálogo de dados, algo que traz mais clareza e até mesmo insights para os stakeholders.
+
+- **dim_produtos**
+
+| Nome da Coluna | Tipo de Dado | Descrição |
+|-|-|-|
+|produtos_key|BIGINT
+|id_produto|INTEGER
+|cadastro_produto|VARCHAR(50)
+|id_categoria|VARCHAR(50)
+|categoria|VARCHAR(50)
+|nome_produto|VARCHAR(100)
+|subcategoria|VARCHAR(50)
+|linha|VARCHAR(50)
+|manutencao|VARCHAR(50)
+|custo|INTEGER
+|data_inicio|DATE
