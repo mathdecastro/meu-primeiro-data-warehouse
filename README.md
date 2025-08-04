@@ -101,12 +101,12 @@ Na camada prata já foi possível compreender de uma melhor maneira como as tabe
 Na camada ouro, adotamos uma modelagem de dados do tipo *star schema*, que se encaixa muito bem para o propósito deste Data Warehouse. Temos uma tabela fato com os dados transacionais de vendas com duas chaves estrangeiras que conectam com as duas tabelas dimensão de produtos e clientes.
 
 As conexões entre tabelas são do tipo *1 Mandatory to Many Optional*, ou seja:
-- Na tabela de produtos:
+- Em relação aos produtos:
     - Pode haver produtos que não foram vendidos ainda.
     - Pode haver produtos que foram vendidos uma única vez.
     - Pode haver produtos que foram vendidos mais de uma vez.
 
-- Na tabela de clientes:
+- Em relação aos clientes:
     - Pode haver clientes que não compraram ainda.
     - Pode haver clientes que compraram uma única vez.
     - Pode haver clientes que compraram mais de uma vez.
@@ -115,18 +115,35 @@ As conexões entre tabelas são do tipo *1 Mandatory to Many Optional*, ou seja:
 
 Uma das etapas mais importantes após a criação de um Data Warehouse é a de disponibilizar uma documentação clara do que é exatamente cada dado de cada tabela. Estou me referindo à criação de um catálogo de dados, algo que traz mais clareza e até mesmo insights para os stakeholders.
 
-- **dim_produtos**
+#### **Dimensão Produtos**
+- **Conteúdo desta tabela**: Esta tabela contém dados detalhados sobre os produtos comercializados pela empresa.
 
 | Nome da Coluna | Tipo de Dado | Descrição |
 |-|-|-|
-|produtos_key|BIGINT
-|id_produto|INTEGER
-|cadastro_produto|VARCHAR(50)
-|id_categoria|VARCHAR(50)
-|categoria|VARCHAR(50)
-|nome_produto|VARCHAR(100)
-|subcategoria|VARCHAR(50)
-|linha|VARCHAR(50)
-|manutencao|VARCHAR(50)
-|custo|INTEGER
-|data_inicio|DATE
+|produtos_key|BIGINT|Chave primária do tipo substituta, que funciona como identificador único de um produto e serve para se relacionar com outras tabelas|
+|id_produto|INTEGER|Identificador único do produto para fins de rastreio interno|
+|cadastro_produto|VARCHAR(50)|Código alfanumérico identificador do produto, muito utilizado para categorização e inventário|
+|id_categoria|VARCHAR(50)|Identificador único da categoria do produto|
+|categoria|VARCHAR(50)|Categoria do produto (e.g., Bikes, Componentes, Clothing etc.)
+|nome_produto|VARCHAR(100)|Nome do produto de maneira descritiva, com detalhes como cor do produto e até mesmo tamanho do produto|
+|subcategoria|VARCHAR(50)|Subcategoria do produto (e.g., se a categoria for Bikes, então a subcategoria diz respeito ao tipo de bicicleta)
+|linha|VARCHAR(50)|Linha do produto. A linha de produtos da empresa gira em torno de três tipos de bicicletas: Touring, uma linha para quem faz pedaladas esporádicas para lazer; Road, uma linha para quem gosta de ciclismo mais profissional; Mountain, uma linha para aqueles clientes aventureiros e radicais. Há uma outra linha, chamada de Other Sales, para produtos que fazem parte das três anteriores|
+|manutencao|VARCHAR(50)|Indica se o produto tem manutenção (e.g., No, Yes)|
+|custo|INTEGER|Custo de produção do produto|
+|data_inicio|DATE|Data de início do custo da produção do produto|
+
+#### **Dimensão Clientes**
+- **Conteúdo desta tabela**: Esta tabela contém dados demográficos e geográficos detalhados sobre os clientes da empresa.
+
+| Nome da Coluna | Tipo de Dado | Descrição |
+|-|-|-|
+|clientes_key|BIGINT
+|id_cliente|INTEGER
+|cadastro_cliente|VARCHAR(50)
+|primeiro_nome|VARCHAR(50)
+|ultimo_nome|VARCHAR(50)
+|estado_civil|VARCHAR(50)
+|sexo|VARCHAR(50)
+|pais|VARCHAR(50)
+|data_nascimento|DATE
+|data_cadastro|DATE
