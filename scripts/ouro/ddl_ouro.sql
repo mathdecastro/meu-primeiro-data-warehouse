@@ -47,7 +47,7 @@ AS
 -- Criando view ouro.dim_produtos
 DROP VIEW IF EXISTS
     ouro.dim_produtos CASCADE;
-CREATE OR REPLACE VIEW
+CREATE VIEW
     ouro.dim_produtos
 AS
     SELECT
@@ -74,7 +74,7 @@ AS
 -- Criando view ouro.fato_vendas
 DROP VIEW IF EXISTS
     ouro.fato_vendas CASCADE;
-CREATE OR REPLACE VIEW
+CREATE VIEW
     ouro.fato_vendas
 AS
     SELECT
