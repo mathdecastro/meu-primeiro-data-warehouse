@@ -115,35 +115,86 @@ As conexões entre tabelas são do tipo *1 Mandatory to Many Optional*, ou seja:
 
 Uma das etapas mais importantes após a criação de um Data Warehouse é a de disponibilizar uma documentação clara do que é exatamente cada dado de cada tabela. Estou me referindo à criação de um catálogo de dados, algo que traz mais clareza e até mesmo insights para os stakeholders.
 
-#### **Dimensão Produtos**
+### **Dimensão Produtos**
 - **Conteúdo desta tabela**: Esta tabela contém dados detalhados sobre os produtos comercializados pela empresa.
 
 | Nome da Coluna | Tipo de Dado | Descrição |
 |-|-|-|
-|produtos_key|BIGINT|Chave primária do tipo substituta, que funciona como identificador único de um produto e serve para se relacionar com outras tabelas|
-|id_produto|INTEGER|Identificador único do produto para fins de rastreio interno|
-|cadastro_produto|VARCHAR(50)|Código alfanumérico identificador do produto, muito utilizado para categorização e inventário|
-|id_categoria|VARCHAR(50)|Identificador único da categoria do produto|
-|categoria|VARCHAR(50)|Categoria do produto (e.g., Bikes, Componentes, Clothing etc.)
-|nome_produto|VARCHAR(100)|Nome do produto de maneira descritiva, com detalhes como cor do produto e até mesmo tamanho do produto|
-|subcategoria|VARCHAR(50)|Subcategoria do produto (e.g., se a categoria for Bikes, então a subcategoria diz respeito ao tipo de bicicleta)
-|linha|VARCHAR(50)|Linha do produto. A linha de produtos da empresa gira em torno de três tipos de bicicletas: Touring, uma linha para quem faz pedaladas esporádicas para lazer; Road, uma linha para quem gosta de ciclismo mais profissional; Mountain, uma linha para aqueles clientes aventureiros e radicais. Há uma outra linha, chamada de Other Sales, para produtos que fazem parte das três anteriores|
-|manutencao|VARCHAR(50)|Indica se o produto tem manutenção (e.g., No, Yes)|
-|custo|INTEGER|Custo de produção do produto|
-|data_inicio|DATE|Data de início do custo da produção do produto|
+|produtos_key|BIGINT|Chave primária do tipo substituta, que funciona como identificador único de um produto e serve para se relacionar com outras tabelas.|
+|id_produto|INTEGER|Identificador único do produto para fins de rastreio interno.|
+|cadastro_produto|VARCHAR(50)|Código alfanumérico identificador do produto, muito utilizado para categorização e inventário.|
+|id_categoria|VARCHAR(50)|Identificador único da categoria do produto.|
+|categoria|VARCHAR(50)|Categoria do produto (e.g., Bikes, Componentes, Clothing etc.).|
+|nome_produto|VARCHAR(100)|Nome do produto de maneira descritiva, com detalhes como cor do produto e até mesmo tamanho do produto.|
+|subcategoria|VARCHAR(50)|Subcategoria do produto (e.g., se a categoria for Bikes, então a subcategoria diz respeito ao tipo de bicicleta).|
+|linha|VARCHAR(50)|Linha do produto. A linha de produtos da empresa gira em torno de três tipos de bicicletas: Touring, uma linha para quem faz pedaladas esporádicas para lazer; Road, uma linha para quem gosta de ciclismo mais profissional; Mountain, uma linha para aqueles clientes aventureiros e radicais. Há uma outra linha, chamada de Other Sales, para produtos que fazem parte das três anteriores.|
+|manutencao|VARCHAR(50)|Indica se o produto tem manutenção (e.g., No, Yes).|
+|custo|INTEGER|Custo de produção do produto.|
+|data_inicio|DATE|Data de início do custo da produção do produto, formatada em YYYY-MM-DD (e.g., 2010-01-01).|
 
-#### **Dimensão Clientes**
+### **Dimensão Clientes**
 - **Conteúdo desta tabela**: Esta tabela contém dados demográficos e geográficos detalhados sobre os clientes da empresa.
 
 | Nome da Coluna | Tipo de Dado | Descrição |
 |-|-|-|
-|clientes_key|BIGINT
-|id_cliente|INTEGER
-|cadastro_cliente|VARCHAR(50)
-|primeiro_nome|VARCHAR(50)
-|ultimo_nome|VARCHAR(50)
-|estado_civil|VARCHAR(50)
-|sexo|VARCHAR(50)
-|pais|VARCHAR(50)
-|data_nascimento|DATE
-|data_cadastro|DATE
+|clientes_key|BIGINT|Chave primária do tipo substituta, que funciona como identificador único de um cliente e serve para se relacionar com outras tabelas.|
+|id_cliente|INTEGER|Identificador único do cliente para fins de rastreio interno.|
+|cadastro_cliente|VARCHAR(50)|Código alfanumérico identificador do cliente, utilizado principalmente para tarefas de rastreio e referenciamento.|
+|primeiro_nome|VARCHAR(50)|Primeiro nome do cliente.|
+|ultimo_nome|VARCHAR(50)|Último nome do cliente.|
+|estado_civil|VARCHAR(50)|Estado civil do cliente (e.g., Married, Single etc.).|
+|sexo|VARCHAR(50)|Sexo do cliente (e.g., Male, Female etc.).|
+|pais|VARCHAR(50)|País do cliente (e.g., United States, Australia, Canada etc.).|
+|data_nascimento|DATE|Data de nascimento do cliente.|
+|data_cadastro|DATE|Data de cadastro do cliente na base de dados.|
+
+### **Fato Vendas**
+- **Conteúdo desta tabela**: Esta tabela contém dados transacionais detalhados sobre as vendas de produtos da empresa.
+
+| Nome da Coluna | Tipo de Dado | Descrição |
+|-|-|-|
+|numero_pedido|VARCHAR(50)|Código alfanumérico que identifica uma venda (e.g., se em uma venda o cliente comprou quatro produtos diferentes, então este código irá aparecer quatro vezes nesta tabela).|
+|produtos_key|BIGINT|Chave estrangeira ligada ao produto vendido.|
+|clientes_key|BIGINT|Chave estrangeira ligada ao cliente comprador.|
+|data_pedido|DATE|Data em que o pedido foi feito.|
+|data_envio|DATE|Data em que o pedido foi enviado.|
+|data_vencimento|DATE|Data de vencimento do pagamento do pedido.|
+|valor_venda|INTEGER|Valor da venda, que basicamente é a quantidade comprada do produto multiplicada pelo preço do produto (e.g., Venda = Quantidade x Preço).|
+|quantidade|INTEGER|Quantas unidades que o cliente comprou do produto.|
+|preco|INTEGER|Preço unitário do produto.|
+
+## :file_folder: **Estrutura do Projeto**
+
+```
+meu-primeiro-datawarehouse/
+│
+├── data/
+│   ├── fonte_crm/
+│       ├── cust_info.csv
+│       ├── prd_info.csv
+│       ├── sales_details.csv
+│   ├── fonte_erp/
+│       ├── CUST_AZ12.csv
+│       ├── LOC_A101.csv
+│       ├── PX_CAT_G1V2.csv│
+├── docs/
+│   ├── images/
+│       ├── arquitetura.png
+│       ├── fluxo.png
+│       ├── integracao.png
+│       ├── modelagem.png                      
+├── scripts/
+│   ├── bronze/
+│       ├── ddl_bronze.sql
+│       ├── load_bronze.sql
+│   ├── ouro/
+│       ├── ddl_ouro.sql
+│   ├── prata/
+│       ├── ddl_prata.sql
+│       ├── load_prata.sql
+│   ├── init_database.sql
+├── tests/
+│   ├── teste_qualidade_ouro.sql
+│   ├── teste_qualidade_prata.sql
+└── README.md
+```
